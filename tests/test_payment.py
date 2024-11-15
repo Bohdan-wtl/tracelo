@@ -1,5 +1,6 @@
 import time
 import datetime
+import allure
 from random import randint
 from playwright.sync_api import Page, sync_playwright, expect
 from faker import Faker
@@ -24,6 +25,8 @@ def context(request, browser):
 def page(context, request):
     page = context.new_page()
     yield page
+    if request.node.rep_call.failed:
+        page.screenshot(path=f"artifacts/screenshots/{request.node.name}.png", full_page=True)
     page.close()
 
 @pytest.mark.parametrize("link", links)
