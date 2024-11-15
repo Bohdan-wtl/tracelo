@@ -1,7 +1,6 @@
 links = [
     "https://stage.tracelo.com/en?c=aed",
     "https://stage.tracelo.com/en?c=amd",
-    "https://stage.tracelo.com/en?c=ars",
     "https://stage.tracelo.com/en?c=aud",
     "https://stage.tracelo.com/en?c=azn",
     "https://stage.tracelo.com/en?c=bbd",
@@ -35,7 +34,6 @@ links = [
     "https://stage.tracelo.com/en?c=myr",
     "https://stage.tracelo.com/en?c=nad",
     "https://stage.tracelo.com/en?c=nok",
-    "https://stage.tracelo.com/en?c=nzd",
     "https://stage.tracelo.com/en?c=pab",
     "https://stage.tracelo.com/en?c=pen",
     "https://stage.tracelo.com/en?c=pkr",

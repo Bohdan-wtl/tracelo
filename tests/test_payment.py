@@ -1,6 +1,6 @@
 import time
 from random import randint
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Page, sync_playwright, expect
 from faker import Faker
 import pytest
 from tests.resources.links import links
@@ -31,10 +31,11 @@ def test_stipe_payment(page: Page, link, card):
     fake = Faker()
     random_number = randint(1, 999999999999)
     fake_email = f"wtl-automation{random_number}@test.com"
-    page.goto(link)
+    page.goto("https://stage.tracelo.com/en?c=aed")
+    page.locator("(//input[@value='+380'])[1]").wait_for(state="visible")
     page.locator("input[id='phone_input']").fill("631727538")
     page.locator("button[type='submit']").click()
-    page.get_by_placeholder("hello@mail.com").fill(fake_email)
+    page.locator("//input[@id='input']").fill(fake_email)
     page.get_by_role("button", name="Continue", exact=True).click()
     content_frame = page.frame_locator("iframe[name*='__privateStripeFrame']").first
     content_frame.get_by_placeholder("1234 1234 1234 1234").fill(card["number"])
@@ -42,21 +43,17 @@ def test_stipe_payment(page: Page, link, card):
     content_frame.get_by_placeholder("CVC").fill(card["cvc"])
     page.get_by_role("button", name="Submit").click()
     transaction_time= f"{int(time.time())}"
-    page.get_by_placeholder("First Name").fill(fake.first_name())
-    page.get_by_placeholder("Last Name").fill(fake.last_name())
-    page.get_by_placeholder("Main Street").fill(fake.street())
-    page.get_by_placeholder("Barcelona").fill(fake.city())
-    page.get_by_placeholder("0123").fill(fake.zipcode())
-    page.get_by_role("button", name="Save").click()
-    page.get_by_role("button", name="Close").click()
-    page.locator("svg").first.click()
-    page.get_by_role("link", name="Logout").click()
+    page.locator("//input[@name='first_name']").wait_for(state="visible")
+    page.locator("//input[@name='first_name']").fill(fake.first_name())
+    page.locator("//input[@name='last_name']").fill(fake.last_name())
+    page.locator("//input[@name='address']").fill(fake.address())
+    page.locator("//input[@name='city']").fill(fake.city())
+    page.locator("//input[@name='zipcode']").fill(fake.zipcode())
+    page.locator("//button[text()='Save']").click()
+    page.locator("//button[@aria-label='Close']").wait_for(state="visible")
+    page.locator("//button[@aria-label='Close']").click()
+    page.locator("//div[@class='hum-burger-menu']").wait_for(state="visible")
+    page.locator("//div[@class='hum-burger-menu']").click()
+    page.locator("//span[text()='Logout']").click()
     print(f"Transaction passed for {link} and {card} - please check the transaction in Stripe - email {fake_email}")
     print(f"Transaction time: {transaction_time}")
-
-
-
-#test-deliquent01@test.com
-# password :12
-# test-deliquent02@test.com
-# password :12
