@@ -165,8 +165,8 @@ test.describe('Stripe Payment Test', () => {
         await page.locator("//input[@name='city']").fill(faker.location.city())
         await page.locator("//input[@name='zipcode']").fill(faker.location.zipCode())
         await page.locator("//button[text()='Save']").click()
+        expect(await page.locator("//input[@name='first_name']").isVisible());
         console.log(`Transaction passed for ${link} with card ending in ${card} using email ${fake_email}`);
-
       });
     }
   }
