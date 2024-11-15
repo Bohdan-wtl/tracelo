@@ -59,10 +59,10 @@ def test_stipe_payment(page: Page):
     # page.locator("//div[@class='hum-burger-menu']").click()
     # page.locator("//span[text()='Logout']").click()
 
-    log_file_path = "transaction_logs.txt"
-    with open(log_file_path, "a") as log_file:
-        log_file.write(f"Transaction passed for {link} and {card} - please check the transaction in Stripe - email {fake_email}\n")
-        log_file.write(f"Transaction time: {now}\n")
-
-    allure.attach.file(log_file_path, name="Transaction Log", attachment_type=allure.attachment_type.TEXT)
+    # log_file_path = "transaction_logs.txt"
+    # with open(log_file_path, "a") as log_file:
+    #     log_file.write(f"Transaction passed for {link} and {card} - please check the transaction in Stripe - email {fake_email}\n")
+    #     log_file.write(f"Transaction time: {now}\n")
+    #
+    # allure.attach.file(log_file_path, name="Transaction Log", attachment_type=allure.attachment_type.TEXT)
 
