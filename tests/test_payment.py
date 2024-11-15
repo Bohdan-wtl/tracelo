@@ -1,9 +1,8 @@
-import time
 import datetime
-import allure
 from random import randint
-from playwright.sync_api import Page, sync_playwright, expect
+from playwright.sync_api import Page, sync_playwright
 from faker import Faker
+import allure
 import pytest
 from tests.resources.links import links
 from tests.resources.cards import cards
@@ -33,7 +32,7 @@ def test_stipe_payment(page: Page, link, card):
     fake = Faker()
     random_number = randint(1, 999999999999)
     fake_email = f"wtl-automation{random_number}@test.com"
-    page.goto("https://stage.tracelo.com/en?c=aed")
+    page.goto(link)
     now = datetime.datetime.now()
     page.locator("(//input[@value='+380'])[1]").wait_for(state="visible")
     page.locator("input[id='phone_input']").fill("631727538")
@@ -45,7 +44,6 @@ def test_stipe_payment(page: Page, link, card):
     content_frame.get_by_placeholder("MM / YY").fill(card["exp_date"])
     content_frame.get_by_placeholder("CVC").fill(card["cvc"])
     page.get_by_role("button", name="Submit").click()
-    transaction_time= f"{int(time.time())}"
     page.locator("//input[@name='first_name']").wait_for(state="visible")
     page.locator("//input[@name='first_name']").fill(fake.first_name())
     page.locator("//input[@name='last_name']").fill(fake.last_name())
@@ -58,5 +56,11 @@ def test_stipe_payment(page: Page, link, card):
     page.locator("//div[@class='hum-burger-menu']").wait_for(state="visible")
     page.locator("//div[@class='hum-burger-menu']").click()
     page.locator("//span[text()='Logout']").click()
-    print(f"Transaction passed for {link} and {card} - please check the transaction in Stripe - email {fake_email}")
-    print(f"Transaction time: {now}")
+
+    log_file_path = "transaction_logs.txt"
+    with open(log_file_path, "a") as log_file:
+        log_file.write(f"Transaction passed for {link} and {card} - please check the transaction in Stripe - email {fake_email}\n")
+        log_file.write(f"Transaction time: {now}\n")
+
+    allure.attach.file(log_file_path, name="Transaction Log", attachment_type=allure.attachment_type.TEXT)
+
