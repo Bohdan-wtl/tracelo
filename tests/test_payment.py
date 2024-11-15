@@ -24,11 +24,28 @@ def context(request, browser):
 def page(context, request):
     page = context.new_page()
     yield page
+    if request.node.rep_call.failed:
+        page.screenshot(path=f"artifacts/screenshots/{request.node.name}.png", full_page=True)
     page.close()
 
-# @pytest.mark.parametrize("link", links)
-# @pytest.mark.parametrize("card", cards.values())
-def test_stipe_payment(page: Page):
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, "rep_" + rep.when, rep)
+
+
+@pytest.fixture(scope="function", autouse=True)
+@allure.title("Failed test artifacts")
+def artifacts(request):
+    yield
+    if request.node.rep_call.failed:
+        allure.attach.file(f"artifacts/screenshots/{request.node.name}.png", name="screenshot",
+                           attachment_type=allure.attachment_type.PNG)
+
+@pytest.mark.parametrize("link", links)
+@pytest.mark.parametrize("card", cards.values())
+def test_stipe_payment(page: Page, card, link):
     fake = Faker()
     random_number = randint(1, 999999999999)
     fake_email = f"wtl-automation{random_number}@test.com"
@@ -39,30 +56,22 @@ def test_stipe_payment(page: Page):
     page.locator("//input[@id='input']").fill(fake_email)
     page.get_by_role("button", name="Continue", exact=True).click()
     content_frame = page.frame_locator("iframe[name*='__privateStripeFrame']").first
-    # content_frame.get_by_placeholder("1234 1234 1234 1234").fill(card["number"])
-    # content_frame.get_by_placeholder("MM / YY").fill(card["exp_date"])
-    # content_frame.get_by_placeholder("CVC").fill(card["cvc"])
-    content_frame.get_by_placeholder("1234 1234 1234 1234").fill("4242424242424242")
-    content_frame.get_by_placeholder("MM / YY").fill("11/30")
-    content_frame.get_by_placeholder("CVC").fill("111")
+    content_frame.get_by_placeholder("1234 1234 1234 1234").fill(card["number"])
+    content_frame.get_by_placeholder("MM / YY").fill(card["exp_date"])
+    content_frame.get_by_placeholder("CVC").fill(card["cvc"])
     page.get_by_role("button", name="Submit").click()
-    # page.locator("//input[@name='first_name']").wait_for(state="visible")
-    # page.locator("//input[@name='first_name']").fill(fake.first_name())
-    # page.locator("//input[@name='last_name']").fill(fake.last_name())
-    # page.locator("//input[@name='address']").fill(fake.address())
-    # page.locator("//input[@name='city']").fill(fake.city())
-    # page.locator("//input[@name='zipcode']").fill(fake.zipcode())
-    # page.locator("//button[text()='Save']").click()
-    # page.locator("//button[@aria-label='Close']").wait_for(state="visible")
-    # page.locator("//button[@aria-label='Close']").click()
-    # page.locator("//div[@class='hum-burger-menu']").wait_for(state="visible")
-    # page.locator("//div[@class='hum-burger-menu']").click()
-    # page.locator("//span[text()='Logout']").click()
+    page.locator("//input[@name='first_name']").wait_for(state="visible")
+    page.locator("//input[@name='first_name']").fill(fake.first_name())
+    page.locator("//input[@name='last_name']").fill(fake.last_name())
+    page.locator("//input[@name='address']").fill(fake.address())
+    page.locator("//input[@name='city']").fill(fake.city())
+    page.locator("//input[@name='zipcode']").fill(fake.zipcode())
+    page.locator("//button[text()='Save']").click()
 
-    # log_file_path = "transaction_logs.txt"
-    # with open(log_file_path, "a") as log_file:
-    #     log_file.write(f"Transaction passed for {link} and {card} - please check the transaction in Stripe - email {fake_email}\n")
-    #     log_file.write(f"Transaction time: {now}\n")
-    #
-    # allure.attach.file(log_file_path, name="Transaction Log", attachment_type=allure.attachment_type.TEXT)
+    log_file_path = "transaction_logs.txt"
+    with open(log_file_path, "a") as log_file:
+        log_file.write(f"Transaction passed for {link} and {card} - please check the transaction in Stripe - email {fake_email}\n")
+        log_file.write(f"Transaction time: {now}\n")
+
+    allure.attach.file(log_file_path, name="Transaction Log", attachment_type=allure.attachment_type.TEXT)
 
