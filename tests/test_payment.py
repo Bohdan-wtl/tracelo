@@ -1,4 +1,5 @@
 import time
+import datetime
 from random import randint
 from playwright.sync_api import Page, sync_playwright, expect
 from faker import Faker
@@ -7,7 +8,7 @@ from tests.resources.links import links
 from tests.resources.cards import cards
 
 @pytest.fixture(scope="function")
-def browser(request):
+def session(request):
     with sync_playwright() as p:
         browser = p.chromium.launch()
         yield browser
@@ -32,6 +33,7 @@ def test_stipe_payment(page: Page, link, card):
     random_number = randint(1, 999999999999)
     fake_email = f"wtl-automation{random_number}@test.com"
     page.goto("https://stage.tracelo.com/en?c=aed")
+    now = datetime.datetime.now()
     page.locator("(//input[@value='+380'])[1]").wait_for(state="visible")
     page.locator("input[id='phone_input']").fill("631727538")
     page.locator("button[type='submit']").click()
@@ -56,4 +58,4 @@ def test_stipe_payment(page: Page, link, card):
     page.locator("//div[@class='hum-burger-menu']").click()
     page.locator("//span[text()='Logout']").click()
     print(f"Transaction passed for {link} and {card} - please check the transaction in Stripe - email {fake_email}")
-    print(f"Transaction time: {transaction_time}")
+    print(f"Transaction time: {now}")
