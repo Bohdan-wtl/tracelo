@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 node_modules/
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+=======
+.venv
+__pycache__
+Tracelo.iml
+.idea
+allure-results
+>>>>>>> 02ea9fcbb68822943648855a70a5637c42843322
