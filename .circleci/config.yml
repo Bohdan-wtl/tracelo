@@ -33,3 +33,7 @@ jobs:
       - store_artifacts:
           path: playwright-report
           destination: playwright-report
+workflows:
+  run-tests-workflow:
+    jobs:
+      - run-tests
