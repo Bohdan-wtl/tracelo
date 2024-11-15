@@ -31,4 +31,4 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: allure-results
-          path: test-results/
+          path: allure-results
