@@ -25,8 +25,6 @@ def context(request, browser):
 def page(context, request):
     page = context.new_page()
     yield page
-    if request.node.rep_call.failed:
-        page.screenshot(path=f"artifacts/screenshots/{request.node.name}.png", full_page=True)
     page.close()
 
 @pytest.mark.parametrize("link", links)
