@@ -9,7 +9,7 @@ from tests.resources.cards import cards
 @pytest.fixture(scope="function")
 def browser(request):
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch()
         yield browser
         browser.close()
 
