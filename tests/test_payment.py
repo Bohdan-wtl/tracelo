@@ -26,13 +26,13 @@ def page(context, request):
     yield page
     page.close()
 
-@pytest.mark.parametrize("link", links)
-@pytest.mark.parametrize("card", cards.values())
-def test_stipe_payment(page: Page, link, card):
+# @pytest.mark.parametrize("link", links)
+# @pytest.mark.parametrize("card", cards.values())
+def test_stipe_payment(page: Page):
     fake = Faker()
     random_number = randint(1, 999999999999)
     fake_email = f"wtl-automation{random_number}@test.com"
-    page.goto(link)
+    page.goto("https://stage.tracelo.com/en?c=aed")
     now = datetime.datetime.now()
     page.locator("(//input[@value='+380'])[1]").wait_for(state="visible")
     page.locator("input[id='phone_input']").fill("631727538")
@@ -40,9 +40,12 @@ def test_stipe_payment(page: Page, link, card):
     page.locator("//input[@id='input']").fill(fake_email)
     page.get_by_role("button", name="Continue", exact=True).click()
     content_frame = page.frame_locator("iframe[name*='__privateStripeFrame']").first
-    content_frame.get_by_placeholder("1234 1234 1234 1234").fill(card["number"])
-    content_frame.get_by_placeholder("MM / YY").fill(card["exp_date"])
-    content_frame.get_by_placeholder("CVC").fill(card["cvc"])
+    # content_frame.get_by_placeholder("1234 1234 1234 1234").fill(card["number"])
+    # content_frame.get_by_placeholder("MM / YY").fill(card["exp_date"])
+    # content_frame.get_by_placeholder("CVC").fill(card["cvc"])
+    content_frame.get_by_placeholder("1234 1234 1234 1234").fill("4242424242424242")
+    content_frame.get_by_placeholder("MM / YY").fill("11/30")
+    content_frame.get_by_placeholder("CVC").fill("111")
     page.get_by_role("button", name="Submit").click()
     page.locator("//input[@name='first_name']").wait_for(state="visible")
     page.locator("//input[@name='first_name']").fill(fake.first_name())

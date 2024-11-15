@@ -1,0 +1,10 @@
+Transaction passed for https://stage.tracelo.com/en?c=aed and {'number': '4242424242424242', 'exp_date': '11/30', 'cvc': '111'} - please check the transaction in Stripe - email wtl-automation254677519851@test.com
+Transaction time: 2024-11-15 14:56:03.831950
+Transaction passed for https://stage.tracelo.com/en?c=amd and {'number': '4242424242424242', 'exp_date': '11/30', 'cvc': '111'} - please check the transaction in Stripe - email wtl-automation872032813868@test.com
+Transaction time: 2024-11-15 14:56:20.443551
+Transaction passed for https://stage.tracelo.com/en?c=aud and {'number': '4242424242424242', 'exp_date': '11/30', 'cvc': '111'} - please check the transaction in Stripe - email wtl-automation963960180622@test.com
+Transaction time: 2024-11-15 14:56:37.182783
+Transaction passed for https://stage.tracelo.com/en?c=azn and {'number': '4242424242424242', 'exp_date': '11/30', 'cvc': '111'} - please check the transaction in Stripe - email wtl-automation819426337072@test.com
+Transaction time: 2024-11-15 14:56:53.295545
+Transaction passed for https://stage.tracelo.com/en?c=bbd and {'number': '4242424242424242', 'exp_date': '11/30', 'cvc': '111'} - please check the transaction in Stripe - email wtl-automation111973440716@test.com
+Transaction time: 2024-11-15 14:57:13.000584
