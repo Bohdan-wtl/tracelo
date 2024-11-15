@@ -22,7 +22,7 @@ jobs:
         run: python -m playwright install --with-deps
 
       - name: Run your tests
-        run: pytest --alluredir=allure-results
+        run: pytest -s -v -n 5 --alluredir=allure-results
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
